@@ -1,7 +1,7 @@
 # Mathematical Models
 
-## Population Forecasting
-Logistic Growth Model:
+## Population Growth
+Logistic Model
 
 ```
 p' = rate * p(t) * (1 - p(t) / K(t))
@@ -11,7 +11,7 @@ p' = rate * p(t) * (1 - p(t) / K(t))
 * Sample application in sample_population.py
 
 ## Epidemiology
-SIR Model:
+SIR Model
 
 ```
 S' = - transmitRate * S(t) * I(t)
