@@ -14,8 +14,8 @@ p' = rate * p(t) * (1 - p(t) / K(t))
 SIR Model
 
 ```
-S' = - transmitRate * S(t) * I(t)
-I' = transmitRate * S(t) * I(t) - removeRate * I(t)
+S' = - transmitRate * S(t) * I(t) / N
+I' = (transmitRate * S(t) * I(t) / N) - (removeRate * I(t))
 R' = removeRate * I(t)
 ```
 
