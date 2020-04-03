@@ -4,29 +4,24 @@ from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 
 class SIRModel:
-    # alpha := transmit rate
-    #  beta := remove rate
-    #     N := population size
-    #  sir0 := initial susceptible, infected and removed
-    def __init__(self, alpha=3.5, beta=0.5, N=1, sir0=(0.99, 0.01, 0.0)):
-        self.N = N
-        self.alpha = alpha
-        self.beta = beta
+    def __init__(self, transmitRate=3.5, removeRate=0.5, sir0=(0.99, 0.01, 0.0)):
+        self.transmitRate = transmitRate
+        self.removeRate = removeRate
         self.sir0 = sir0
 
     def __str__(self):
-        return 'SIR: Alpha={} Beta={} N={}'.format(self.alpha, self.beta, self.N)
+        return 'SIR: TransmitRate={} RemoveRate={}'.format(self.transmitRate, self.removeRate)
 
     def __repr__(self):
-        return 'SIR({}, {}, N={})'.format(self.alpha, self.beta, self.N)
+        return 'SIR({}, {})'.format(self.transmitRate, self.removeRate)
 
     def __call__(self, sir, t):
-        # S'(t) = - alpha * S * I / N
-        # I'(t) = alpha * S * I / N - beta * I
-        # R'(t) = beta * I
+        # S'(t) = - transmitRate * S(t) * I(t)
+        # I'(t) = transmitRate * S(t) * I(t) - removeRate * I(t)
+        # R'(t) = removeRate * I(t)
 
-        transmitted = self.alpha * sir[0] * sir[1] / self.N
-        removed = self.beta * sir[1]
+        transmitted = self.transmitRate * sir[0] * sir[1]
+        removed = self.removeRate * sir[1]
         dS = - transmitted
         dI = transmitted - removed
         dR = removed
