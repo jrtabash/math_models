@@ -21,9 +21,9 @@ class SIRModel:
         return 'SIR({}, {}, N={})'.format(self.alpha, self.beta, self.N)
 
     def __call__(self, sir, t):
-        # S'(t) = - alpha * S(t) * I(t) / N
-        # I'(t) = (alpha * S(t) * I(t) / N) - (beta * I(t))
-        # R'(t) = beta * I(t)
+        # S'(t) = - alpha * S * I / N
+        # I'(t) = alpha * S * I / N - beta * I
+        # R'(t) = beta * I
 
         transmitted = self.alpha * sir[0] * sir[1] / self.N
         removed = self.beta * sir[1]

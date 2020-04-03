@@ -14,9 +14,9 @@ p' = rate * p(t) * (1 - p(t) / K(t))
 SIR Model
 
 ```
-S' = - a * S(t) * I(t) / N
-I' = (a * S(t) * I(t) / N) - (b * I(t))
-R' = b * I(t)
+S' = - transmitRate * S(t) * I(t) / N
+I' = (transmitRate * S(t) * I(t) / N) - (removeRate * I(t))
+R' = removeRate * I(t)
 ```
 
 * Model defined in math_models_epidemic.py
