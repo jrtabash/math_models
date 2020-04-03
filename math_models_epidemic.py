@@ -3,32 +3,32 @@ import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 
-class ModelBase:
-    def __init__(self, labels, colors):
-        self.numCompartments = len(labels)
+class CompartmentModelBase:
+    def __init__(self, initialConditions, labels, colors):
+        self.numCompartments = len(initialConditions)
+        self.initialConditions = initialConditions
         self.labels = labels
         self.colors = colors
 
-class SIRModel(ModelBase):
-    def __init__(self, transmitRate=3.5, removeRate=0.5, sir0=(0.99, 0.01, 0.0)):
-        super().__init__(['Susceptible', 'Infected', 'Removed'], ['b', 'r', 'g'])
-        self.transmitRate = transmitRate
-        self.removeRate = removeRate
-        self.sir0 = sir0
+class SIRModel(CompartmentModelBase):
+    def __init__(self, alpha=3.5, beta=0.5, sir0=(0.99, 0.01, 0.0)):
+        super().__init__(sir0, ['Susceptible', 'Infected', 'Removed'], ['b', 'r', 'g'])
+        self.alpha = alpha
+        self.beta = beta
 
     def __str__(self):
-        return 'SIR: TransmitRate={} RemoveRate={}'.format(self.transmitRate, self.removeRate)
+        return 'SIR: Alpha={} Beta={}'.format(self.alpha, self.beta)
 
     def __repr__(self):
-        return 'SIR({}, {})'.format(self.transmitRate, self.removeRate)
+        return 'SIR({}, {})'.format(self.alpha, self.beta)
 
     def __call__(self, sir, t):
-        # S'(t) = - transmitRate * S(t) * I(t)
-        # I'(t) = transmitRate * S(t) * I(t) - removeRate * I(t)
-        # R'(t) = removeRate * I(t)
+        # S'(t) = - alpha * S(t) * I(t)
+        # I'(t) = alpha * S(t) * I(t) - beta * I(t)
+        # R'(t) = beta * I(t)
 
-        transmitted = self.transmitRate * sir[0] * sir[1]
-        removed = self.removeRate * sir[1]
+        transmitted = self.alpha * sir[0] * sir[1]
+        removed = self.beta * sir[1]
         dS = - transmitted
         dI = transmitted - removed
         dR = removed
@@ -36,7 +36,7 @@ class SIRModel(ModelBase):
 
 def solve(model=SIRModel(), maxTime=10, timeSteps=100):
     t = np.linspace(0, maxTime, timeSteps)
-    sir = odeint(model, model.sir0, t)
+    sir = odeint(model, model.initialConditions, t)
     return t, sir
 
 def plot(model, t, ys):
