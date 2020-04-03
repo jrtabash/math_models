@@ -3,8 +3,15 @@ import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 
-class SIRModel:
+class ModelBase:
+    def __init__(self, labels, colors):
+        self.numCompartments = len(labels)
+        self.labels = labels
+        self.colors = colors
+
+class SIRModel(ModelBase):
     def __init__(self, transmitRate=3.5, removeRate=0.5, sir0=(0.99, 0.01, 0.0)):
+        super().__init__(['Susceptible', 'Infected', 'Removed'], ['b', 'r', 'g'])
         self.transmitRate = transmitRate
         self.removeRate = removeRate
         self.sir0 = sir0
@@ -32,10 +39,13 @@ def solve(model=SIRModel(), maxTime=10, timeSteps=100):
     sir = odeint(model, model.sir0, t)
     return t, sir
 
-def plot(model, t, sir):
-    plt.plot(t, sir[:, 0], 'b', label='Susceptible')
-    plt.plot(t, sir[:, 1], 'r', label='Infected')
-    plt.plot(t, sir[:, 2], 'g', label='Removed')
+def plot(model, t, ys):
+    labels = model.labels
+    colors = model.colors
+
+    for i in range(model.numCompartments):
+        plt.plot(t, ys[:, i], color=model.colors[i], label=labels[i])
+
     plt.xlabel('Time')
     plt.ylabel('Population')
     plt.title('{}'.format(model))
