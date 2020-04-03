@@ -11,28 +11,56 @@ class CompartmentModelBase:
         self.colors = colors
 
 class SIRModel(CompartmentModelBase):
-    def __init__(self, alpha=3.5, beta=0.5, sir0=(0.99, 0.01, 0.0)):
+    def __init__(self, transmitRate=3.5, removeRate=0.5, sir0=(0.99, 0.01, 0.0)):
         super().__init__(sir0, ['Susceptible', 'Infected', 'Removed'], ['b', 'r', 'g'])
-        self.alpha = alpha
-        self.beta = beta
+        self.transmitRate = transmitRate
+        self.removeRate = removeRate
 
     def __str__(self):
-        return 'SIR: Alpha={} Beta={}'.format(self.alpha, self.beta)
+        return 'SIR: Transmit={} Remove={}'.format(self.transmitRate, self.removeRate)
 
     def __repr__(self):
-        return 'SIR({}, {})'.format(self.alpha, self.beta)
+        return 'SIR({}, {})'.format(self.transmitRate, self.removeRate)
 
     def __call__(self, sir, t):
-        # S'(t) = - alpha * S(t) * I(t)
-        # I'(t) = alpha * S(t) * I(t) - beta * I(t)
-        # R'(t) = beta * I(t)
+        # S'(t) = - transmitRate * S(t) * I(t)
+        # I'(t) = transmitRate * S(t) * I(t) - removeRate * I(t)
+        # R'(t) = removeRate * I(t)
 
-        transmitted = self.alpha * sir[0] * sir[1]
-        removed = self.beta * sir[1]
+        transmitted = self.transmitRate * sir[0] * sir[1]
+        removed = self.removeRate * sir[1]
         dS = - transmitted
         dI = transmitted - removed
         dR = removed
         return dS, dI, dR
+
+class SEIRModel(CompartmentModelBase):
+    def __init__(self, removeRate=0.5, exposeRate=3.5, infectRate=1.0, seir0=(0.99, 0.01, 0.0, 0.0)):
+        super().__init__(seir0, ['Susceptible', 'Exposed', 'Infected', 'Removed'], ['b', 'c', 'r', 'g'])
+        self.removeRate = removeRate
+        self.exposeRate = exposeRate
+        self.infectRate = infectRate
+
+    def __str__(self):
+        return 'SEIR: Expose={} Infect={} Remove={} '.format(self.exposeRate, self.infectRate, self.removeRate)
+
+    def __repr__(self):
+        return 'SIR({}, {}, {})'.format(self.exposeRate, self.infectRate, self.removeRate)
+
+    def __call__(self, seir, t):
+        # S'(t) = - exposeRate * S(t) * I(t)
+        # E'(t) = exposeRate * S(t) * I(t) - infectRate * E(t)
+        # I'(t) = infectRate * E(t) - removeRate * I(t)
+        # R'(t) = removeRate * I(t)
+
+        exposed = self.exposeRate * seir[0] * seir[2]
+        infected = self.infectRate * seir[1]
+        removed = self.removeRate * seir[2]
+        dS = - exposed
+        dE = exposed - infected
+        dI = infected - removed
+        dR = removed
+        return dS, dE, dI, dR
 
 def solve(model=SIRModel(), maxTime=10, timeSteps=100):
     t = np.linspace(0, maxTime, timeSteps)
