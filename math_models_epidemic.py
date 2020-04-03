@@ -35,25 +35,26 @@ class SIRModel(CompartmentModelBase):
         return dS, dI, dR
 
 class SEIRModel(CompartmentModelBase):
-    def __init__(self, removeRate=0.5, exposeRate=3.5, infectRate=1.0, seir0=(0.99, 0.01, 0.0, 0.0)):
+    def __init__(self, transmitRate=3.5, exposedTransmitRate=0.0, infectRate=1.0, removeRate=0.5, seir0=(0.99, 0.01, 0.0, 0.0)):
         super().__init__(seir0, ['Susceptible', 'Exposed', 'Infected', 'Removed'], ['b', 'c', 'r', 'g'])
-        self.removeRate = removeRate
-        self.exposeRate = exposeRate
+        self.transmitRate = transmitRate
+        self.exposedTransmitRate = exposedTransmitRate
         self.infectRate = infectRate
+        self.removeRate = removeRate
 
     def __str__(self):
-        return 'SEIR: Expose={} Infect={} Remove={} '.format(self.exposeRate, self.infectRate, self.removeRate)
+        return 'SEIR: Transmit={} ExposedTransmit={} Infect={} Remove={}'.format(self.transmitRate, self.exposedTransmitRate, self.infectRate, self.removeRate)
 
     def __repr__(self):
-        return 'SIR({}, {}, {})'.format(self.exposeRate, self.infectRate, self.removeRate)
+        return 'SIR({}, {}, {}, {})'.format(self.transmitRate, self.infectRate, self.exposedTransmitRate, self.removeRate)
 
     def __call__(self, seir, t):
-        # S'(t) = - exposeRate * S(t) * I(t)
-        # E'(t) = exposeRate * S(t) * I(t) - infectRate * E(t)
+        # S'(t) = - transmitRate * S(t) * (I(t) + exposedTransmitRate * E(t))
+        # E'(t) = transmitRate * S(t) * (I(t) + exposedTransmitRate * E(t)) - infectRate * E(t)
         # I'(t) = infectRate * E(t) - removeRate * I(t)
         # R'(t) = removeRate * I(t)
 
-        exposed = self.exposeRate * seir[0] * seir[2]
+        exposed = self.transmitRate * seir[0] * (seir[2] + self.exposedTransmitRate * seir[1])
         infected = self.infectRate * seir[1]
         removed = self.removeRate * seir[2]
         dS = - exposed

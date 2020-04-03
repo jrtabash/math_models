@@ -4,7 +4,7 @@
 Logistic Model
 
 ```
-p' = rate * p(t) * (1 - p(t) / K(t))
+p'(t) = rate * p(t) * (1 - p(t) / K(t))
 ```
 
 * Model defined in math_models_population.py
@@ -14,16 +14,16 @@ p' = rate * p(t) * (1 - p(t) / K(t))
 SIR Model
 
 ```
-S' = - transmitRate * S(t) * I(t)
-I' = transmitRate * S(t) * I(t) - removeRate * I(t)
-R' = removeRate * I(t)
+S'(t) = - transmitRate * S(t) * I(t)
+I'(t) = transmitRate * S(t) * I(t) - removeRate * I(t)
+R'(t) = removeRate * I(t)
 ```
 
 SEIR Model
 
 ```
-S'(t) = - exposeRate * S(t) * I(t)
-E'(t) = exposeRate * S(t) * I(t) - infectRate * E(t)
+S'(t) = - transmitRate * S(t) * (I(t) + exposedTransmitRate * E(t))
+E'(t) = transmitRate * S(t) * (I(t) + exposedTransmitRate * E(t)) - infectRate * E(t)
 I'(t) = infectRate * E(t) - removeRate * I(t)
 R'(t) = removeRate * I(t)
 ```
