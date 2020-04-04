@@ -22,8 +22,8 @@ R'(t) = removeRate * I(t)
 SEIR Model
 
 ```
-S'(t) = - transmitRate * S(t) * (I(t) + exposedTransmitRate * E(t))
-E'(t) = transmitRate * S(t) * (I(t) + exposedTransmitRate * E(t)) - infectRate * E(t)
+S'(t) = - transmitRate * S(t) * (I(t) + reducedEIRate * E(t))
+E'(t) = transmitRate * S(t) * (I(t) + reducedEIRate * E(t)) - infectRate * E(t)
 I'(t) = infectRate * E(t) - removeRate * I(t)
 R'(t) = removeRate * I(t)
 ```

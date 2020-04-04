@@ -12,7 +12,7 @@ def runSEIR():
     epidemic.plot(model, t, seir)
 
 def runSEIR2():
-    model = epidemic.SEIRModel(transmitRate=3.5, exposedTransmitRate=0.25, infectRate=1.0, removeRate=0.5)
+    model = epidemic.SEIRModel(transmitRate=3.5, reducedEIRate=0.25, infectRate=1.0, removeRate=0.5)
     t, seir = epidemic.solve(model, 20, 200)
     epidemic.plot(model, t, seir)
 
