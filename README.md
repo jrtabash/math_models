@@ -7,8 +7,8 @@ Logistic Model
 p'(t) = rate * p(t) * (1 - p(t) / K(t))
 ```
 
-* Model defined in math_models_population.py
-* Sample application in sample_population.ipynb
+* Model defined in [math_models_population.py](math_models_population.py)
+* Sample application in [sample_population.ipynb](sample_population.ipynb)
 
 ## Epidemiology
 SIR Model
@@ -28,5 +28,5 @@ I'(t) = infectRate * E(t) - removeRate * I(t)
 R'(t) = removeRate * I(t)
 ```
 
-* Models defined in math_models_epidemic.py
-* Sample applications in sample_epidemic.ipynb
+* Models defined in [math_models_epidemic.py](math_models_epidemic.py)
+* Sample applications in [sample_epidemic.ipynb](sample_epidemic.ipynb)
