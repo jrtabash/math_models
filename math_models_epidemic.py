@@ -46,7 +46,7 @@ class SEIRModel(CompartmentModelBase):
         return 'SEIR: Transmit={} ExposedTransmit={} Infect={} Remove={}'.format(self.transmitRate, self.exposedTransmitRate, self.infectRate, self.removeRate)
 
     def __repr__(self):
-        return 'SIR({}, {}, {}, {})'.format(self.transmitRate, self.infectRate, self.exposedTransmitRate, self.removeRate)
+        return 'SIR({}, {}, {}, {})'.format(self.transmitRate, self.exposedTransmitRate, self.infectRate, self.removeRate)
 
     def __call__(self, seir, t):
         # S'(t) = - transmitRate * S(t) * (I(t) + exposedTransmitRate * E(t))
