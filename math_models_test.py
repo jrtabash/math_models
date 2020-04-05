@@ -1,5 +1,6 @@
 import math_models_util as util
 import math_models_population as population
+import math_models_epidemic as epidemic
 import numpy as np
 import unittest
 
@@ -78,6 +79,30 @@ class TestMathModelsPopulation(unittest.TestCase):
         self.assertEqual(int(lm(10000, 0)), 495)
         self.assertEqual(int(lm(10495, 1)), 519)
         self.assertEqual(int(lm(11014, 2)), 545)
+
+class TestMathModelsEpidemic(unittest.TestCase):
+    def allEqual(self, tuple1, tuple2):
+        return np.all(np.apply_along_axis(lambda x: x <= 0.0000001,
+                                          0,
+                                          np.abs(np.array(tuple1) - np.array(tuple2))))
+
+    def testSIRModel(self):
+        sir = epidemic.SIRModel(transmitRate=2.0, removeRate=0.75)
+        self.assertTrue(self.allEqual(sir(sir.initialConditions, 0.1),
+                                      (-0.0198, 0.0123, 0.0075)))
+        self.assertTrue(self.allEqual(sir((0.9702, 0.0223, 0.0075), 0.2),
+                                      (-0.0432709, 0.0265459, 0.016725)))
+        self.assertTrue(self.allEqual(sir((0.926929080, 0.048845920, 0.024225), 0.3),
+                                      (-0.0905534, 0.0539189, 0.0366344)))
+
+    def testSEIRModel(self):
+        seir = epidemic.SEIRModel(transmitRate=3.0, reducedEIRate=0.25, infectRate=1.0, removeRate=0.5)
+        self.assertTrue(self.allEqual(seir(seir.initialConditions, 0.1),
+                                      (-0.007425, -0.002575, 0.01, 0.0)))
+        self.assertTrue(self.allEqual(seir((0.982575, 0.007425, 0.01, 0.0), 0.2),
+                                      (-0.0349489, 0.0275239, 0.002425, 0.005)))
+        self.assertTrue(self.allEqual(seir((0.9476261, 0.0349489, 0.012425, 0.005), 0.3),
+                                      (-0.0601616, 0.0252127, 0.0287364, 0.0062125)))
 
 if __name__ == "__main__":
     unittest.main()
