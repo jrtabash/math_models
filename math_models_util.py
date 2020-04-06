@@ -3,6 +3,24 @@ import numpy as np
 class PopulationUtilException(Exception):
     pass
 
+class PolyChangeFtn:
+    # m * t / (s + t) where t >= 0 and s >= 1
+    def __init__(self, m, s):
+        self.m = m
+        self.s = s
+
+    def __call__(self, x):
+        return self.m * x / (self.s + x)
+
+class ExpChangeFtn:
+    # -m * (e(-t / s) - 1) where t >= 0 and s >= 1
+    def __init__(self, m, s):
+        self.m = m
+        self.s = s
+
+    def __call__(self, x):
+        return - self.m * (np.exp(-x / self.s) - 1)
+
 class ApplyToCallablesFtn:
     def __init__(self, applyFtn, callables):
         self.applyFtn = applyFtn

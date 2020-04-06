@@ -5,6 +5,111 @@ import numpy as np
 import unittest
 
 class TestMathModelsUtil(unittest.TestCase):
+    def equal(self, lhs, rhs):
+        return np.abs(lhs - rhs) <= 0.0000001
+
+    def testPolyChangeFtnIncreasing(self):
+        pc = util.PolyChangeFtn(1, 1)
+        self.assertTrue(self.equal(pc(0), 0))
+        self.assertTrue(self.equal(pc(1), 0.5))
+        self.assertTrue(self.equal(pc(2), 0.6666666))
+        self.assertTrue(self.equal(pc(3), 0.75))
+        self.assertTrue(self.equal(pc(4), 0.80))
+        self.assertTrue(self.equal(pc(5), 0.8333333))
+        self.assertTrue(pc(10) <= 1.0)
+        self.assertTrue(pc(50) <= 1.0)
+        self.assertTrue(pc(100) <= 1.0)
+        self.assertTrue(pc(500) <= 1.0)
+        self.assertTrue(pc(1000) <= 1.0)
+
+    def testPolyChangeFtnIncreasing2(self):
+        pc = util.PolyChangeFtn(0.2, 10)
+        self.assertTrue(self.equal(pc(0), 0))
+        self.assertTrue(self.equal(pc(1), 0.0181818))
+        self.assertTrue(self.equal(pc(10), 0.1))
+        self.assertTrue(self.equal(pc(50), 0.1666666))
+        self.assertTrue(self.equal(pc(100), 0.1818181))
+        self.assertTrue(self.equal(pc(500), 0.1960784))
+        self.assertTrue(self.equal(pc(1000), 0.1980198))
+        self.assertTrue(pc(5000) <= 0.2)
+        self.assertTrue(pc(10000) <= 0.2)
+
+    def testPolyChangeFtnDecreasing(self):
+        pc = util.PolyChangeFtn(-1, 1)
+        self.assertTrue(self.equal(pc(0), 0))
+        self.assertTrue(self.equal(pc(1), -0.5))
+        self.assertTrue(self.equal(pc(2), -0.6666666))
+        self.assertTrue(self.equal(pc(3), -0.75))
+        self.assertTrue(self.equal(pc(4), -0.80))
+        self.assertTrue(self.equal(pc(5), -0.8333333))
+        self.assertTrue(pc(10) >= -1.0)
+        self.assertTrue(pc(50) >= -1.0)
+        self.assertTrue(pc(100) >= -1.0)
+        self.assertTrue(pc(500) >= -1.0)
+        self.assertTrue(pc(1000) >= -1.0)
+
+    def testPolyChangeFtnDecreasing2(self):
+        pc = util.PolyChangeFtn(-0.2, 10)
+        self.assertTrue(self.equal(pc(0), 0))
+        self.assertTrue(self.equal(pc(1), -0.0181818))
+        self.assertTrue(self.equal(pc(10), -0.1))
+        self.assertTrue(self.equal(pc(50), -0.1666666))
+        self.assertTrue(self.equal(pc(100), -0.1818181))
+        self.assertTrue(self.equal(pc(500), -0.1960784))
+        self.assertTrue(self.equal(pc(1000), -0.1980198))
+        self.assertTrue(pc(5000) >= -0.2)
+        self.assertTrue(pc(10000) >= -0.2)
+
+    def testExpChangeFtnIncreasing(self):
+        ec = util.ExpChangeFtn(1, 1)
+        self.assertTrue(self.equal(ec(0), 0))
+        self.assertTrue(self.equal(ec(1), 0.6321205))
+        self.assertTrue(self.equal(ec(2), 0.8646647))
+        self.assertTrue(self.equal(ec(3), 0.9502129))
+        self.assertTrue(self.equal(ec(4), 0.9816843))
+        self.assertTrue(self.equal(ec(5), 0.993262))
+        self.assertTrue(ec(10) <= 1.0)
+        self.assertTrue(ec(50) <= 1.0)
+        self.assertTrue(ec(100) <= 1.0)
+        self.assertTrue(ec(500) <= 1.0)
+        self.assertTrue(ec(1000) <= 1.0)
+
+    def testExpChangeFtnIncreasing2(self):
+        ec = util.ExpChangeFtn(0.2, 10)
+        self.assertTrue(self.equal(ec(0), 0))
+        self.assertTrue(self.equal(ec(10), 0.1264241))
+        self.assertTrue(self.equal(ec(25), 0.183583))
+        self.assertTrue(self.equal(ec(50), 0.1986524))
+        self.assertTrue(self.equal(ec(100), 0.1999909))
+        self.assertTrue(self.equal(ec(200), 0.1999999))
+        self.assertTrue(ec(1000) <= 2.0)
+        self.assertTrue(ec(10000) <= 2.0)
+
+    def testExpChangeFtnDecreasing(self):
+        ec = util.ExpChangeFtn(-1, 1)
+        self.assertTrue(self.equal(ec(0), 0))
+        self.assertTrue(self.equal(ec(1), -0.6321205))
+        self.assertTrue(self.equal(ec(2), -0.8646647))
+        self.assertTrue(self.equal(ec(3), -0.9502129))
+        self.assertTrue(self.equal(ec(4), -0.9816843))
+        self.assertTrue(self.equal(ec(5), -0.993262))
+        self.assertTrue(ec(10) >= -1.0)
+        self.assertTrue(ec(50) >= -1.0)
+        self.assertTrue(ec(100) >= -1.0)
+        self.assertTrue(ec(500) >= -1.0)
+        self.assertTrue(ec(1000) >= -1.0)
+
+    def testExpChangeFtnDecreasing2(self):
+        ec = util.ExpChangeFtn(-0.2, 10)
+        self.assertTrue(self.equal(ec(0), 0))
+        self.assertTrue(self.equal(ec(10), -0.1264241))
+        self.assertTrue(self.equal(ec(25), -0.183583))
+        self.assertTrue(self.equal(ec(50), -0.1986524))
+        self.assertTrue(self.equal(ec(100), -0.1999909))
+        self.assertTrue(self.equal(ec(200), -0.1999999))
+        self.assertTrue(ec(1000) >= -2.0)
+        self.assertTrue(ec(10000) >= -2.0)
+
     def testSumCallablesFtn(self):
         sc = util.SumCallablesFtn([lambda x: 2 * x, lambda x: x, lambda x: x - 1])
         self.assertEqual(sc(-5), -21)
