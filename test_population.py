@@ -2,7 +2,7 @@ import math_models_population as population
 import math_models_util as util
 import sys
 
-def runDiscreteChange():
+def runPiecewiseChange():
     space = population.Dimension(
         'space',
         [util.PiecewiseFtn([50, 100], [0.0, 0.10, 0.20]),
@@ -47,10 +47,10 @@ def runContinuousChange():
     population.plot(model, t, p)
 
 def run(which):
-    if which == 'disc':
-        runDiscreteChange()
+    if which == 'piece':
+        runPiecewiseChange()
     elif which == 'cont':
         runContinuousChange()
 
 if __name__ == '__main__':
-    run(sys.argv[1] if len(sys.argv) > 1 else 'disc')
+    run(sys.argv[1] if len(sys.argv) > 1 else 'piece')
