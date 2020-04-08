@@ -2,6 +2,7 @@ import math_models_util as util
 import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 
 class Dimension(util.SumCallablesFtn):
     def __init__(self, name, factors):
@@ -37,15 +38,49 @@ def solve(model, maxTime=10):
     p = odeint(model, model.population0, t)
     return t, p
 
-def plot(model, t, p):
-    cPoints = util.FunctionPoints(model.capacity, t)
+def plotConstLines_(t, cPoints):
     plt.plot(t, cPoints.minLine(), 'c', label='Min Capacity')
     plt.plot(t, cPoints.maxLine(), 'g', label='Max Capacity')
-    plt.plot(t, cPoints.y, 'r', label='Carrying Capacity')
-    plt.plot(t, p, 'b', label='Population')
+
+def plotFinish_(t, cPoints, legend=None):
     plt.xlabel('Time')
     plt.ylabel('Population')
     plt.title('Population Forecast')
-    plt.legend(loc='best')
+    if legend is not None:
+        plt.legend(loc=legend)
     plt.grid(True)
     plt.show()
+
+def plot(model, t, p):
+    cPoints = util.FunctionPoints(model.capacity, t)
+    plotConstLines_(t, cPoints)
+    plt.plot(t, cPoints.y, 'r', label='Carrying Capacity')
+    plt.plot(t, p, 'b', label='Population')
+    plotFinish_(t, cPoints, legend='best')
+
+def animate(model, t, p, legend=None):
+    cPoints = util.FunctionPoints(model.capacity, t)
+    gridSize = util.XYsMinMaxRange(t, [p, cPoints.y])
+
+    fig = plt.figure()
+    ax = plt.axes(xlim=gridSize.xRange(), ylim=gridSize.yRange())
+
+    plotConstLines_(t, cPoints)
+    cline, = ax.plot([], [], 'r', label='Carrying Capacity')
+    pline, = ax.plot([], [], 'b', label='Population')
+
+    def initLines():
+        pline.set_data([], [])
+        cline.set_data([], [])
+        return [pline, cline]
+
+    def updateLines(i):
+        x = t[:i]
+        py = p[:i]
+        cy = cPoints.y[:i]
+        pline.set_data(x, py)
+        cline.set_data(x, cy)
+        return [pline, cline]
+
+    anim = FuncAnimation(fig, updateLines, init_func=initLines, frames=len(t), interval=20, blit=True, repeat=False)
+    plotFinish_(t, cPoints, legend=legend)

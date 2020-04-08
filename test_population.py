@@ -2,7 +2,7 @@ import math_models_population as population
 import math_models_util as util
 import sys
 
-def runPiecewiseChange():
+def runPiecewiseChange(animate):
     space = population.Dimension(
         'space',
         [util.PiecewiseFtn([50, 100], [0.0, 0.10, 0.20]),
@@ -22,9 +22,12 @@ def runPiecewiseChange():
     model = population.LogisticModel(0.02, 4500000, capacity)
 
     t, p = population.solve(model, maxTime=250)
-    population.plot(model, t, p)
+    if animate:
+        population.animate(model, t, p, legend='lower right')
+    else:
+        population.plot(model, t, p)
 
-def runContinuousChange():
+def runContinuousChange(animate):
     space = population.Dimension(
         'space',
         [util.PolyChangeFtn(0.2, 100),
@@ -44,13 +47,17 @@ def runContinuousChange():
     model = population.LogisticModel(0.02, 4500000, capacity)
 
     t, p = population.solve(model, maxTime=250)
-    population.plot(model, t, p)
+    if animate:
+        population.animate(model, t, p, legend='lower right')
+    else:
+        population.plot(model, t, p)
 
-def run(which):
+def run(which, animate):
     if which == 'piece':
-        runPiecewiseChange()
+        runPiecewiseChange(animate)
     elif which == 'cont':
-        runContinuousChange()
+        runContinuousChange(animate)
 
 if __name__ == '__main__':
-    run(sys.argv[1] if len(sys.argv) > 1 else 'piece')
+    run(sys.argv[1].lower() if len(sys.argv) > 1 else 'piece',
+        sys.argv[2].lower() == 'anim' if len(sys.argv) > 2 else False)
