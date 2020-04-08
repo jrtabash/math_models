@@ -146,8 +146,6 @@ class TestMathModelsUtil(unittest.TestCase):
 
     def testXYsMinMaxRange(self):
         mmr = util.XYsMinMaxRange([1, 2, 3], [[1.0, 2.0, 4.0], [-1.0, 0.0, 1.0]])
-        xrange = mmr.xRange()
-        yrange = mmr.yRange()
         self.assertEqual(mmr.xMin, 1)
         self.assertEqual(mmr.xMax, 3)
         self.assertEqual(mmr.yMin, -1.0)

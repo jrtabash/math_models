@@ -72,7 +72,7 @@ def animate(model, t, p, legend=None):
     def initLines():
         pline.set_data([], [])
         cline.set_data([], [])
-        return [pline, cline]
+        return pline, cline
 
     def updateLines(i):
         x = t[:i]
@@ -80,7 +80,7 @@ def animate(model, t, p, legend=None):
         cy = cPoints.y[:i]
         pline.set_data(x, py)
         cline.set_data(x, cy)
-        return [pline, cline]
+        return pline, cline
 
     anim = FuncAnimation(fig, updateLines, init_func=initLines, frames=len(t), interval=20, blit=True, repeat=False)
     plotFinish_(t, cPoints, legend=legend)
