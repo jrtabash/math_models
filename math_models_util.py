@@ -75,3 +75,19 @@ class FunctionPoints:
 
     def maxLine(self):
         return np.full(len(self.y), self.yMax)
+
+class XYsMinMaxRange:
+    def __init__(self, x, ys, deltaPct=0.05):
+        self.xMin = np.min(x)
+        self.xMax = np.max(x)
+        self.yMin = min([np.min(y) for y in ys])
+        self.yMax = max([np.max(y) for y in ys])
+        self.deltaPct = deltaPct
+
+    def xRange(self):
+        delta = np.abs(self.deltaPct * self.xMin)
+        return self.xMin - delta, self.xMax + delta
+
+    def yRange(self):
+        delta = np.abs(self.deltaPct * self.yMin)
+        return self.yMin - delta, self.yMax + delta

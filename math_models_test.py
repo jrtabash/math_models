@@ -144,6 +144,18 @@ class TestMathModelsUtil(unittest.TestCase):
         self.assertTrue(np.all(fp.minLine() == np.array([2, 2, 2, 2, 2])))
         self.assertTrue(np.all(fp.maxLine() == np.array([10, 10, 10, 10, 10])))
 
+    def testXYsMinMaxRange(self):
+        mmr = util.XYsMinMaxRange([1, 2, 3], [[1.0, 2.0, 4.0], [-1.0, 0.0, 1.0]])
+        xrange = mmr.xRange()
+        yrange = mmr.yRange()
+        self.assertEqual(mmr.xMin, 1)
+        self.assertEqual(mmr.xMax, 3)
+        self.assertEqual(mmr.yMin, -1.0)
+        self.assertEqual(mmr.yMax, 4.0)
+        self.assertEqual(mmr.deltaPct, 0.05)
+        self.assertEqual(mmr.xRange(), (0.95, 3.05))
+        self.assertEqual(mmr.yRange(), (-1.05, 4.05))
+
 class TestMathModelsPopulation(unittest.TestCase):
     def testDimension(self):
         dim = population.Dimension('foobar',
