@@ -42,7 +42,7 @@ def plotConstLines_(t, cPoints):
     plt.plot(t, cPoints.minLine(), 'c', label='Min Capacity')
     plt.plot(t, cPoints.maxLine(), 'g', label='Max Capacity')
 
-def plotFinish_(t, cPoints, legend=None):
+def plotFinish_(legend=None):
     plt.xlabel('Time')
     plt.ylabel('Population')
     plt.title('Population Forecast')
@@ -56,7 +56,7 @@ def plot(model, t, p):
     plotConstLines_(t, cPoints)
     plt.plot(t, cPoints.y, 'r', label='Carrying Capacity')
     plt.plot(t, p, 'b', label='Population')
-    plotFinish_(t, cPoints, legend='best')
+    plotFinish_(legend='best')
 
 def animate(model, t, p, legend=None):
     cPoints = util.FunctionPoints(model.capacity, t)
@@ -83,4 +83,4 @@ def animate(model, t, p, legend=None):
         return pline, cline
 
     anim = FuncAnimation(fig, updateLines, init_func=initLines, frames=len(t), interval=20, blit=True, repeat=False)
-    plotFinish_(t, cPoints, legend=legend)
+    plotFinish_(legend=legend)
