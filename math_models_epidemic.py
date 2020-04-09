@@ -1,8 +1,8 @@
+import math_models_animate as anim
 import math_models_util as util
 import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
 
 class CompartmentModelBase:
     def __init__(self, initialConditions, labels, colors):
@@ -88,25 +88,9 @@ def plot(model, t, ys):
     plotFinish_('{}'.format(model), legend='best')
 
 def animate(model, t, ys, legend=None):
-    labels = model.labels
-    colors = model.colors
-    gridSize = util.XYsMinMaxRange(t, ys)
-
-    fig = plt.figure()
-    ax = plt.axes(xlim=gridSize.xRange(), ylim=gridSize.yRange())
-
-    lines = [ax.plot([], [], c, label=l)[0] for c, l in zip(colors, labels)]
-
-    def initLines():
-        for line in lines:
-            line.set_data([], [])
-        return lines
-
-    def updateLines(i):
-        x = t[:i]
-        for line, j, in zip(lines, range(model.numCompartments)):
-            line.set_data(x, ys[:i, j])
-        return lines
-
-    anim = FuncAnimation(fig, updateLines, init_func=initLines, frames=len(t), interval=25, blit=True, repeat=False)
+    animation = anim.Animate(t,
+                             [ys[:, i] for i in range(model.numCompartments)],
+                             labels=model.labels,
+                             colors=model.colors)
+    animation.run(interval=25)
     plotFinish_('{}'.format(model), legend=legend)

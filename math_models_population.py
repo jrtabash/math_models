@@ -1,8 +1,8 @@
+import math_models_animate as anim
 import math_models_util as util
 import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
 
 class Dimension(util.SumCallablesFtn):
     def __init__(self, name, factors):
@@ -60,27 +60,10 @@ def plot(model, t, p):
 
 def animate(model, t, p, legend=None):
     cPoints = util.FunctionPoints(model.capacity, t)
-    gridSize = util.XYsMinMaxRange(t, [p, cPoints.y])
-
-    fig = plt.figure()
-    ax = plt.axes(xlim=gridSize.xRange(), ylim=gridSize.yRange())
-
-    plotConstLines_(t, cPoints)
-    cline, = ax.plot([], [], 'r', label='Carrying Capacity')
-    pline, = ax.plot([], [], 'b', label='Population')
-
-    def initLines():
-        pline.set_data([], [])
-        cline.set_data([], [])
-        return pline, cline
-
-    def updateLines(i):
-        x = t[:i]
-        py = p[:i]
-        cy = cPoints.y[:i]
-        pline.set_data(x, py)
-        cline.set_data(x, cy)
-        return pline, cline
-
-    anim = FuncAnimation(fig, updateLines, init_func=initLines, frames=len(t), interval=20, blit=True, repeat=False)
+    animation = anim.Animate(t,
+                             [p, cPoints.y],
+                             labels=['Population', 'Carrying Capacity'],
+                             colors=['b', 'r'],
+                             preFtn=lambda: plotConstLines_(t, cPoints))
+    animation.run(interval=20)
     plotFinish_(legend=legend)
