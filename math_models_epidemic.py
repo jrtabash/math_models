@@ -2,6 +2,7 @@ import math_models_util as util
 import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 
 class CompartmentModelBase:
     def __init__(self, initialConditions, labels, colors):
@@ -68,6 +69,15 @@ def solve(model=SIRModel(), maxTime=10, timeSteps=100):
     sir = odeint(model, model.initialConditions, t)
     return t, sir
 
+def plotFinish_(title, legend=None):
+    plt.xlabel('Time')
+    plt.ylabel('Population')
+    plt.title(title)
+    if legend is not None:
+        plt.legend(loc=legend)
+    plt.grid()
+    plt.show()
+
 def plot(model, t, ys):
     labels = model.labels
     colors = model.colors
@@ -75,9 +85,28 @@ def plot(model, t, ys):
     for i in range(model.numCompartments):
         plt.plot(t, ys[:, i], color=model.colors[i], label=labels[i])
 
-    plt.xlabel('Time')
-    plt.ylabel('Population')
-    plt.title('{}'.format(model))
-    plt.legend(loc='best')
-    plt.grid()
-    plt.show()
+    plotFinish_('{}'.format(model), legend='best')
+
+def animate(model, t, ys, legend=None):
+    labels = model.labels
+    colors = model.colors
+    gridSize = util.XYsMinMaxRange(t, ys)
+
+    fig = plt.figure()
+    ax = plt.axes(xlim=gridSize.xRange(), ylim=gridSize.yRange())
+
+    lines = [ax.plot([], [], c, label=l)[0] for c, l in zip(colors, labels)]
+
+    def initLines():
+        for line in lines:
+            line.set_data([], [])
+        return lines
+
+    def updateLines(i):
+        x = t[:i]
+        for line, j, in zip(lines, range(model.numCompartments)):
+            line.set_data(x, ys[:i, j])
+        return lines
+
+    anim = FuncAnimation(fig, updateLines, init_func=initLines, frames=len(t), interval=25, blit=True, repeat=False)
+    plotFinish_('{}'.format(model), legend=legend)

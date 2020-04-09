@@ -85,9 +85,9 @@ class XYsMinMaxRange:
         self.deltaPct = deltaPct
 
     def xRange(self):
-        delta = np.abs(self.deltaPct * self.xMin)
+        delta = max(0.01, np.abs(self.deltaPct * self.xMin))
         return self.xMin - delta, self.xMax + delta
 
     def yRange(self):
-        delta = np.abs(self.deltaPct * self.yMin)
+        delta = max(0.01, np.abs(self.deltaPct * self.yMin))
         return self.yMin - delta, self.yMax + delta
