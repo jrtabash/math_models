@@ -202,6 +202,26 @@ class TestMathModelsPopulation(unittest.TestCase):
         self.assertEqual(int(lm(11014, 2)), 545)
 
 class TestMathModelsEpidemic(unittest.TestCase):
+    def testCompartmentModelBase(self):
+        cm = epidemic.CompartmentModelBase(initialConditions=(1, 0, 0),
+                                           labels=['A', 'B', 'C'],
+                                           colors=['r', 'b', 'g'])
+        self.assertEqual(cm.numCompartments, 3)
+        self.assertEqual(cm.initialConditions, (1, 0, 0))
+        self.assertEqual(cm.labels, ['A', 'B', 'C'])
+        self.assertEqual(cm.colors, ['r', 'b', 'g'])
+        self.assertTrue(cm.hasLabel('A'))
+        self.assertTrue(cm.hasLabel('B'))
+        self.assertTrue(cm.hasLabel('C'))
+        self.assertFalse(cm.hasLabel('D'))
+        self.assertTrue(cm.hasColor('r'))
+        self.assertTrue(cm.hasColor('b'))
+        self.assertTrue(cm.hasColor('g'))
+        self.assertFalse(cm.hasColor('c'))
+        self.assertEqual(cm.labelColor('A'), 'r')
+        self.assertEqual(cm.labelColor('B'), 'b')
+        self.assertEqual(cm.labelColor('C'), 'g')
+
     def testSIRModel(self):
         sir = epidemic.SIRModel(transmitRate=2.0, removeRate=0.75)
         self.assertTrue(tequal(sir(sir.initialConditions, 0.1),
