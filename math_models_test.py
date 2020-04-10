@@ -1,21 +1,27 @@
+import unittest
+import numpy as np
 import math_models_util as util
 import math_models_population as population
 import math_models_epidemic as epidemic
-import numpy as np
-import unittest
+
+def fequal(lhs, rhs):
+    return np.abs(lhs - rhs) <= 0.0000001
+
+def tequal(tuple1, tuple2):
+    for lhs, rhs in zip(tuple1, tuple2):
+        if not fequal(lhs, rhs):
+            return False
+    return True
 
 class TestMathModelsUtil(unittest.TestCase):
-    def equal(self, lhs, rhs):
-        return np.abs(lhs - rhs) <= 0.0000001
-
     def testPolyChangeFtnIncreasing(self):
         pc = util.PolyChangeFtn(1, 1)
-        self.assertTrue(self.equal(pc(0), 0))
-        self.assertTrue(self.equal(pc(1), 0.5))
-        self.assertTrue(self.equal(pc(2), 0.6666666))
-        self.assertTrue(self.equal(pc(3), 0.75))
-        self.assertTrue(self.equal(pc(4), 0.80))
-        self.assertTrue(self.equal(pc(5), 0.8333333))
+        self.assertTrue(fequal(pc(0), 0))
+        self.assertTrue(fequal(pc(1), 0.5))
+        self.assertTrue(fequal(pc(2), 0.6666666))
+        self.assertTrue(fequal(pc(3), 0.75))
+        self.assertTrue(fequal(pc(4), 0.80))
+        self.assertTrue(fequal(pc(5), 0.8333333))
         self.assertTrue(pc(10) <= 1.0)
         self.assertTrue(pc(50) <= 1.0)
         self.assertTrue(pc(100) <= 1.0)
@@ -24,24 +30,24 @@ class TestMathModelsUtil(unittest.TestCase):
 
     def testPolyChangeFtnIncreasing2(self):
         pc = util.PolyChangeFtn(0.2, 10)
-        self.assertTrue(self.equal(pc(0), 0))
-        self.assertTrue(self.equal(pc(1), 0.0181818))
-        self.assertTrue(self.equal(pc(10), 0.1))
-        self.assertTrue(self.equal(pc(50), 0.1666666))
-        self.assertTrue(self.equal(pc(100), 0.1818181))
-        self.assertTrue(self.equal(pc(500), 0.1960784))
-        self.assertTrue(self.equal(pc(1000), 0.1980198))
+        self.assertTrue(fequal(pc(0), 0))
+        self.assertTrue(fequal(pc(1), 0.0181818))
+        self.assertTrue(fequal(pc(10), 0.1))
+        self.assertTrue(fequal(pc(50), 0.1666666))
+        self.assertTrue(fequal(pc(100), 0.1818181))
+        self.assertTrue(fequal(pc(500), 0.1960784))
+        self.assertTrue(fequal(pc(1000), 0.1980198))
         self.assertTrue(pc(5000) <= 0.2)
         self.assertTrue(pc(10000) <= 0.2)
 
     def testPolyChangeFtnDecreasing(self):
         pc = util.PolyChangeFtn(-1, 1)
-        self.assertTrue(self.equal(pc(0), 0))
-        self.assertTrue(self.equal(pc(1), -0.5))
-        self.assertTrue(self.equal(pc(2), -0.6666666))
-        self.assertTrue(self.equal(pc(3), -0.75))
-        self.assertTrue(self.equal(pc(4), -0.80))
-        self.assertTrue(self.equal(pc(5), -0.8333333))
+        self.assertTrue(fequal(pc(0), 0))
+        self.assertTrue(fequal(pc(1), -0.5))
+        self.assertTrue(fequal(pc(2), -0.6666666))
+        self.assertTrue(fequal(pc(3), -0.75))
+        self.assertTrue(fequal(pc(4), -0.80))
+        self.assertTrue(fequal(pc(5), -0.8333333))
         self.assertTrue(pc(10) >= -1.0)
         self.assertTrue(pc(50) >= -1.0)
         self.assertTrue(pc(100) >= -1.0)
@@ -50,24 +56,24 @@ class TestMathModelsUtil(unittest.TestCase):
 
     def testPolyChangeFtnDecreasing2(self):
         pc = util.PolyChangeFtn(-0.2, 10)
-        self.assertTrue(self.equal(pc(0), 0))
-        self.assertTrue(self.equal(pc(1), -0.0181818))
-        self.assertTrue(self.equal(pc(10), -0.1))
-        self.assertTrue(self.equal(pc(50), -0.1666666))
-        self.assertTrue(self.equal(pc(100), -0.1818181))
-        self.assertTrue(self.equal(pc(500), -0.1960784))
-        self.assertTrue(self.equal(pc(1000), -0.1980198))
+        self.assertTrue(fequal(pc(0), 0))
+        self.assertTrue(fequal(pc(1), -0.0181818))
+        self.assertTrue(fequal(pc(10), -0.1))
+        self.assertTrue(fequal(pc(50), -0.1666666))
+        self.assertTrue(fequal(pc(100), -0.1818181))
+        self.assertTrue(fequal(pc(500), -0.1960784))
+        self.assertTrue(fequal(pc(1000), -0.1980198))
         self.assertTrue(pc(5000) >= -0.2)
         self.assertTrue(pc(10000) >= -0.2)
 
     def testExpChangeFtnIncreasing(self):
         ec = util.ExpChangeFtn(1, 1)
-        self.assertTrue(self.equal(ec(0), 0))
-        self.assertTrue(self.equal(ec(1), 0.6321205))
-        self.assertTrue(self.equal(ec(2), 0.8646647))
-        self.assertTrue(self.equal(ec(3), 0.9502129))
-        self.assertTrue(self.equal(ec(4), 0.9816843))
-        self.assertTrue(self.equal(ec(5), 0.993262))
+        self.assertTrue(fequal(ec(0), 0))
+        self.assertTrue(fequal(ec(1), 0.6321205))
+        self.assertTrue(fequal(ec(2), 0.8646647))
+        self.assertTrue(fequal(ec(3), 0.9502129))
+        self.assertTrue(fequal(ec(4), 0.9816843))
+        self.assertTrue(fequal(ec(5), 0.993262))
         self.assertTrue(ec(10) <= 1.0)
         self.assertTrue(ec(50) <= 1.0)
         self.assertTrue(ec(100) <= 1.0)
@@ -76,23 +82,23 @@ class TestMathModelsUtil(unittest.TestCase):
 
     def testExpChangeFtnIncreasing2(self):
         ec = util.ExpChangeFtn(0.2, 10)
-        self.assertTrue(self.equal(ec(0), 0))
-        self.assertTrue(self.equal(ec(10), 0.1264241))
-        self.assertTrue(self.equal(ec(25), 0.183583))
-        self.assertTrue(self.equal(ec(50), 0.1986524))
-        self.assertTrue(self.equal(ec(100), 0.1999909))
-        self.assertTrue(self.equal(ec(200), 0.1999999))
+        self.assertTrue(fequal(ec(0), 0))
+        self.assertTrue(fequal(ec(10), 0.1264241))
+        self.assertTrue(fequal(ec(25), 0.183583))
+        self.assertTrue(fequal(ec(50), 0.1986524))
+        self.assertTrue(fequal(ec(100), 0.1999909))
+        self.assertTrue(fequal(ec(200), 0.1999999))
         self.assertTrue(ec(1000) <= 2.0)
         self.assertTrue(ec(10000) <= 2.0)
 
     def testExpChangeFtnDecreasing(self):
         ec = util.ExpChangeFtn(-1, 1)
-        self.assertTrue(self.equal(ec(0), 0))
-        self.assertTrue(self.equal(ec(1), -0.6321205))
-        self.assertTrue(self.equal(ec(2), -0.8646647))
-        self.assertTrue(self.equal(ec(3), -0.9502129))
-        self.assertTrue(self.equal(ec(4), -0.9816843))
-        self.assertTrue(self.equal(ec(5), -0.993262))
+        self.assertTrue(fequal(ec(0), 0))
+        self.assertTrue(fequal(ec(1), -0.6321205))
+        self.assertTrue(fequal(ec(2), -0.8646647))
+        self.assertTrue(fequal(ec(3), -0.9502129))
+        self.assertTrue(fequal(ec(4), -0.9816843))
+        self.assertTrue(fequal(ec(5), -0.993262))
         self.assertTrue(ec(10) >= -1.0)
         self.assertTrue(ec(50) >= -1.0)
         self.assertTrue(ec(100) >= -1.0)
@@ -101,12 +107,12 @@ class TestMathModelsUtil(unittest.TestCase):
 
     def testExpChangeFtnDecreasing2(self):
         ec = util.ExpChangeFtn(-0.2, 10)
-        self.assertTrue(self.equal(ec(0), 0))
-        self.assertTrue(self.equal(ec(10), -0.1264241))
-        self.assertTrue(self.equal(ec(25), -0.183583))
-        self.assertTrue(self.equal(ec(50), -0.1986524))
-        self.assertTrue(self.equal(ec(100), -0.1999909))
-        self.assertTrue(self.equal(ec(200), -0.1999999))
+        self.assertTrue(fequal(ec(0), 0))
+        self.assertTrue(fequal(ec(10), -0.1264241))
+        self.assertTrue(fequal(ec(25), -0.183583))
+        self.assertTrue(fequal(ec(50), -0.1986524))
+        self.assertTrue(fequal(ec(100), -0.1999909))
+        self.assertTrue(fequal(ec(200), -0.1999999))
         self.assertTrue(ec(1000) >= -2.0)
         self.assertTrue(ec(10000) >= -2.0)
 
@@ -189,35 +195,33 @@ class TestMathModelsPopulation(unittest.TestCase):
                     'Dim1',
                     [lambda x: 0.1 * x, lambda x: -0.05 * x]),
                  population.Dimension(
-                    'Dim2',
-                    [lambda x: 0.2 * x, lambda x: -0.1 * x])]))
+                     'Dim2',
+                     [lambda x: 0.2 * x, lambda x: -0.1 * x])]))
         self.assertEqual(int(lm(10000, 0)), 495)
         self.assertEqual(int(lm(10495, 1)), 519)
         self.assertEqual(int(lm(11014, 2)), 545)
 
 class TestMathModelsEpidemic(unittest.TestCase):
-    def allEqual(self, tuple1, tuple2):
-        return np.all(np.apply_along_axis(lambda x: x <= 0.0000001,
-                                          0,
-                                          np.abs(np.array(tuple1) - np.array(tuple2))))
-
     def testSIRModel(self):
         sir = epidemic.SIRModel(transmitRate=2.0, removeRate=0.75)
-        self.assertTrue(self.allEqual(sir(sir.initialConditions, 0.1),
-                                      (-0.0198, 0.0123, 0.0075)))
-        self.assertTrue(self.allEqual(sir((0.9702, 0.0223, 0.0075), 0.2),
-                                      (-0.0432709, 0.0265459, 0.016725)))
-        self.assertTrue(self.allEqual(sir((0.926929080, 0.048845920, 0.024225), 0.3),
-                                      (-0.0905534, 0.0539189, 0.0366344)))
+        self.assertTrue(tequal(sir(sir.initialConditions, 0.1),
+                               (-0.0198, 0.0123, 0.0075)))
+        self.assertTrue(tequal(sir((0.9702, 0.0223, 0.0075), 0.2),
+                               (-0.0432709, 0.0265459, 0.016725)))
+        self.assertTrue(tequal(sir((0.926929080, 0.048845920, 0.024225), 0.3),
+                               (-0.0905534, 0.0539189, 0.0366344)))
 
     def testSEIRModel(self):
-        seir = epidemic.SEIRModel(transmitRate=3.0, reducedEIRate=0.25, infectRate=1.0, removeRate=0.5)
-        self.assertTrue(self.allEqual(seir(seir.initialConditions, 0.1),
-                                      (-0.007425, -0.002575, 0.01, 0.0)))
-        self.assertTrue(self.allEqual(seir((0.982575, 0.007425, 0.01, 0.0), 0.2),
-                                      (-0.0349489, 0.0275239, 0.002425, 0.005)))
-        self.assertTrue(self.allEqual(seir((0.9476261, 0.0349489, 0.012425, 0.005), 0.3),
-                                      (-0.0601616, 0.0252127, 0.0287364, 0.0062125)))
+        seir = epidemic.SEIRModel(transmitRate=3.0,
+                                  reducedEIRate=0.25,
+                                  infectRate=1.0,
+                                  removeRate=0.5)
+        self.assertTrue(tequal(seir(seir.initialConditions, 0.1),
+                               (-0.007425, -0.002575, 0.01, 0.0)))
+        self.assertTrue(tequal(seir((0.982575, 0.007425, 0.01, 0.0), 0.2),
+                               (-0.0349489, 0.0275239, 0.002425, 0.005)))
+        self.assertTrue(tequal(seir((0.9476261, 0.0349489, 0.012425, 0.005), 0.3),
+                               (-0.0601616, 0.0252127, 0.0287364, 0.0062125)))
 
 if __name__ == "__main__":
     unittest.main()

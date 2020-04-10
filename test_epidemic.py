@@ -1,5 +1,5 @@
-import math_models_epidemic as epidemic
 import sys
+import math_models_epidemic as epidemic
 
 def runSIR(animate, transmit=3.5, remove=0.5):
     model = epidemic.SIRModel(transmitRate=transmit, removeRate=remove)
@@ -10,7 +10,10 @@ def runSIR(animate, transmit=3.5, remove=0.5):
         epidemic.plot(model, t, sir)
 
 def runSEIR(animate, transmit=3.5, reducedEI=0.0, infect=1.0, remove=0.5):
-    model = epidemic.SEIRModel(transmitRate=transmit, reducedEIRate=reducedEI, infectRate=infect, removeRate=remove)
+    model = epidemic.SEIRModel(transmitRate=transmit,
+                               reducedEIRate=reducedEI,
+                               infectRate=infect,
+                               removeRate=remove)
     t, seir = epidemic.solve(model, 20, 200)
     if animate:
         epidemic.animate(model, t, seir, legend='center right')

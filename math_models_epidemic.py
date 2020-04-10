@@ -1,8 +1,7 @@
-import math_models_animate as anim
-import math_models_util as util
 import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
+import math_models_animate as anim
 
 class CompartmentModelBase:
     def __init__(self, initialConditions, labels, colors):
@@ -10,6 +9,15 @@ class CompartmentModelBase:
         self.initialConditions = initialConditions
         self.labels = labels
         self.colors = colors
+
+    def hasLabel(self, label):
+        return label in self.labels
+
+    def hasColor(self, color):
+        return color in self.colors
+
+    def labelColor(self, label):
+        return self.colors[self.labels.index(label)]
 
 class SIRModel(CompartmentModelBase):
     def __init__(self, transmitRate=3.5, removeRate=0.5, sir0=(0.99, 0.01, 0.0)):
@@ -36,18 +44,33 @@ class SIRModel(CompartmentModelBase):
         return dS, dI, dR
 
 class SEIRModel(CompartmentModelBase):
-    def __init__(self, transmitRate=3.5, reducedEIRate=0.0, infectRate=1.0, removeRate=0.5, seir0=(0.99, 0.01, 0.0, 0.0)):
-        super().__init__(seir0, ['Susceptible', 'Exposed', 'Infected', 'Removed'], ['b', 'c', 'r', 'g'])
+    def __init__(self,
+                 transmitRate=3.5,
+                 reducedEIRate=0.0,
+                 infectRate=1.0,
+                 removeRate=0.5,
+                 seir0=(0.99, 0.01, 0.0, 0.0)):
+        super().__init__(seir0,
+                         ['Susceptible', 'Exposed', 'Infected', 'Removed'],
+                         ['b', 'c', 'r', 'g'])
         self.transmitRate = transmitRate
         self.reducedEIRate = reducedEIRate
         self.infectRate = infectRate
         self.removeRate = removeRate
 
     def __str__(self):
-        return 'SEIR: Transmit={} ReduceEI={} Infect={} Remove={}'.format(self.transmitRate, self.reducedEIRate, self.infectRate, self.removeRate)
+        return 'SEIR: Transmit={} ReduceEI={} Infect={} Remove={}'.format(
+            self.transmitRate,
+            self.reducedEIRate,
+            self.infectRate,
+            self.removeRate)
 
     def __repr__(self):
-        return 'SIR({}, {}, {}, {})'.format(self.transmitRate, self.reducedEIRate, self.infectRate, self.removeRate)
+        return 'SIR({}, {}, {}, {})'.format(
+            self.transmitRate,
+            self.reducedEIRate,
+            self.infectRate,
+            self.removeRate)
 
     def __call__(self, seir, t):
         # S'(t) = - transmitRate * S(t) * (I(t) + reducedEIRate * E(t))
@@ -79,11 +102,8 @@ def plotFinish_(title, legend=None):
     plt.show()
 
 def plot(model, t, ys):
-    labels = model.labels
-    colors = model.colors
-
     for i in range(model.numCompartments):
-        plt.plot(t, ys[:, i], color=model.colors[i], label=labels[i])
+        plt.plot(t, ys[:, i], color=model.colors[i], label=model.labels[i])
 
     plotFinish_('{}'.format(model), legend='best')
 

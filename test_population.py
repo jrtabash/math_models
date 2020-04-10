@@ -1,6 +1,6 @@
+import sys
 import math_models_population as population
 import math_models_util as util
-import sys
 
 def runPiecewiseChange(animate):
     space = population.Dimension(

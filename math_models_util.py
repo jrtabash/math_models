@@ -3,23 +3,11 @@ import numpy as np
 class PopulationUtilException(Exception):
     pass
 
-class PolyChangeFtn:
-    # m * t / (s + t) where t >= 0 and s >= 1
-    def __init__(self, m, s):
-        self.m = m
-        self.s = s
+def PolyChangeFtn(m, s):
+    return lambda x: m * x / (s + x)
 
-    def __call__(self, x):
-        return self.m * x / (self.s + x)
-
-class ExpChangeFtn:
-    # -m * (e(-t / s) - 1) where t >= 0 and s >= 1
-    def __init__(self, m, s):
-        self.m = m
-        self.s = s
-
-    def __call__(self, x):
-        return - self.m * (np.exp(-x / self.s) - 1)
+def ExpChangeFtn(m, s):
+    return lambda x: - m * (np.exp(-x / s) - 1)
 
 class ApplyToCallablesFtn:
     def __init__(self, applyFtn, callables):
@@ -28,6 +16,12 @@ class ApplyToCallablesFtn:
 
     def __call__(self, x):
         return self.applyFtn([f(x) for f in self.callables])
+
+    def name(self):
+        return str(self.applyFtn)
+
+    def numCallables(self):
+        return len(self.callables)
 
 class SumCallablesFtn(ApplyToCallablesFtn):
     def __init__(self, ftns):
@@ -57,16 +51,15 @@ class PiecewiseFtn:
 
     def check_(self, x, i):
         if i > 0:
-            return x > self.limits[i - 1] and x <= self.limits[i]
-        else:
-            return x <= self.limits[0]
+            return self.limits[i - 1] < x <= self.limits[i]
+        return x <= self.limits[0]
 
     def value_(self, x, i):
         return self.values[i](x) if self.isFunction else self.values[i]
 
 class FunctionPoints:
     def __init__(self, ftn, x):
-        self.y = ftn(x) if type(ftn) == np.vectorize else np.vectorize(ftn)(x)
+        self.y = ftn(x) if isinstance(ftn, np.vectorize) else np.vectorize(ftn)(x)
         self.yMin = np.min(self.y)
         self.yMax = np.max(self.y)
 

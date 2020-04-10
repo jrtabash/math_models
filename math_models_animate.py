@@ -1,6 +1,6 @@
-import math_models_util as util
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+import math_models_util as util
 
 class Animate:
     def __init__(self, x, ys, labels=None, colors=None, preFtn=None):
@@ -29,8 +29,8 @@ class Animate:
         self.lines = [ax.plot([], [], c, label=l)[0] for c, l in zip(self.colors, self.labels)]
 
         FuncAnimation(fig,
-                      lambda i: self.updateLines_(i),
-                      init_func = lambda: self.initLines_(),
+                      self.updateLines_,
+                      init_func=self.initLines_,
                       frames=len(self.x),
                       interval=interval,
                       blit=True,

@@ -1,8 +1,8 @@
-import math_models_animate as anim
-import math_models_util as util
 import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
+import math_models_animate as anim
+import math_models_util as util
 
 class Dimension(util.SumCallablesFtn):
     def __init__(self, name, factors):
@@ -17,6 +17,12 @@ class CarryingCapacity:
     def __call__(self, t):
         return (1 + self.minDimFtn(t)) * self.capacity0
 
+    def __str__(self):
+        return "CarryingCapacity({})".format(self.capacity0)
+
+    def __repr__(self):
+        return str(self)
+
 class LogisticModel:
     def __init__(self, rate, population0, capacity):
         self.rate = rate               # Growth rate
@@ -24,7 +30,10 @@ class LogisticModel:
         self.capacity = capacity       # Carrying Capacity function
 
     def __str__(self):
-        return 'LogisticModel({}, {}, {})'.format(self.rate, self.population0, self.capacity.capacity0)
+        return 'LogisticModel({}, {}, {})'.format(
+            self.rate,
+            self.population0,
+            self.capacity)
 
     def __repr__(self):
         return str(self)
